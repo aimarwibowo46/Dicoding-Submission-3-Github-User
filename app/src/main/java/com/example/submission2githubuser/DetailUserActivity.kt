@@ -15,7 +15,7 @@ class DetailUserActivity : AppCompatActivity() {
 
     companion object {
         const val TAG = "DetailUserActivity"
-        const val USERNAME = "aimarwibowo46"
+        const val USERNAME = "username"
 
         @StringRes
         private val TAB_TITLES = intArrayOf(R.string.tab_text_1, R.string.tab_text_2)
@@ -37,6 +37,8 @@ class DetailUserActivity : AppCompatActivity() {
         TabLayoutMediator(activityDetailUSerBinding.tabs, activityDetailUSerBinding.viewPager) { tab, position ->
             tab.text = resources.getString(TAB_TITLES[position])
         }.attach()
+
+        supportActionBar?.elevation = 0f
     }
 
     private fun displayUserDetail(username: String) {

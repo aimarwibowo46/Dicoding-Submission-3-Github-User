@@ -87,16 +87,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:layout_gravity="bottom"
         android:background="?attr/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_detail_repository"
-        app:tabTextColor="@android:color/white" />
+        android:minHeight="?actionBarSize"
+        app:tabTextColor="@android:color/white"
+        app:tabIndicatorFullWidth="false"
+        app:tabIndicatorHeight="2dp"
+        app:tabMode="fixed"
+        app:tabRippleColor="@null"
+        tools:ignore="MissingConstraints"/>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="375dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
