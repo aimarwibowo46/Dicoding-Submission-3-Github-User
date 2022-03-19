@@ -7,9 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.collections.ArrayList
 
 class FollowersFragment : Fragment() {
 
@@ -22,48 +24,51 @@ class FollowersFragment : Fragment() {
     private lateinit var rvFollowers: RecyclerView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_followers, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val username = arguments?.getString(USERNAME)
+
         progressBar = view.findViewById(R.id.progressBarFollowers)
         rvFollowers = view.findViewById(R.id.recycleViewFollowers)
 
-        displayUserFollowers()
+        displayUserFollowers(username.toString())
     }
 
-    private fun displayUserFollowers() {
+    private fun displayUserFollowers(username: String) {
         showLoading(true)
+        Log.d(TAG, "displayUserFollowers: TEST")
 
-        val client = ApiConfig.getApiService().getUserFollowers(USERNAME)
-        client.enqueue(object : Callback<FollowersResponse> {
+        val client = ApiConfig.getApiService().getUserFollowers(username)
+        client.enqueue(object : Callback<List<FollowersResponse>> {
             override fun onResponse(
-                call: retrofit2.Call<FollowersResponse>,
-                response: Response<FollowersResponse>
+                call: retrofit2.Call<List<FollowersResponse>>,
+                response: Response<List<FollowersResponse>>
             ) {
                 showLoading(false)
                 if(response.isSuccessful) {
                     val responseBody = response.body()
+                    Log.d(TAG, "onResponse: ${responseBody.toString()}")
                     if(responseBody != null) {
-                        setFollowersData(responseBody.followersResponse)
+                        setFollowersData(responseBody)
                     }
                 } else {
-                    Log.e(TAG, "onFailure: ${response.message()}")
+                    Log.e(TAG, "onFailure1: ${response.message()}")
                 }
             }
 
-            override fun onFailure(call: retrofit2.Call<FollowersResponse>, t: Throwable) {
+            override fun onFailure(call: retrofit2.Call<List<FollowersResponse>>, t: Throwable) {
                 showLoading(false)
-                Log.e(TAG, "onFailure: ${t.message}")
+                Log.e(TAG, "onFailure2: ${t.message}")
             }
 
         })
     }
 
-    private fun setFollowersData(items: List<FollowersResponseItem>) {
+    private fun setFollowersData(items: List<FollowersResponse>) {
         val listFollowers = ArrayList<User>()
         for(item in items) {
             val user = User(
@@ -78,7 +83,10 @@ class FollowersFragment : Fragment() {
             )
             listFollowers.add(user)
         }
-        val adapter = FollowersAdapter(listFollowers)
+        Log.d(TAG, "setFollowersData: $listFollowers")
+
+        rvFollowers.layoutManager = LinearLayoutManager(requireContext())
+        val adapter = FollowersAndFollowingAdapter(listFollowers)
         rvFollowers.adapter = adapter
     }
 

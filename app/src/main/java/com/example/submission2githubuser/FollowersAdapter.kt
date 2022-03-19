@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
-class FollowersAdapter(private val listFollowers: ArrayList<User>) : RecyclerView.Adapter<FollowersAdapter.ViewHolder>() {
+class FollowersAndFollowingAdapter(private val listFollowers: ArrayList<User>) : RecyclerView.Adapter<FollowersAndFollowingAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvUsername: TextView = view.findViewById(R.id.txt_username)

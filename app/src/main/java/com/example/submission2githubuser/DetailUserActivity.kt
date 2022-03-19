@@ -33,6 +33,8 @@ class DetailUserActivity : AppCompatActivity() {
         displayUserDetail(username.toString())
 
         val sectionsPagerAdapter = SectionsPagerAdapter(this)
+        sectionsPagerAdapter.username = username.toString()
+
         activityDetailUSerBinding.viewPager.adapter = sectionsPagerAdapter
         TabLayoutMediator(activityDetailUSerBinding.tabs, activityDetailUSerBinding.viewPager) { tab, position ->
             tab.text = resources.getString(TAB_TITLES[position])

@@ -4,12 +4,6 @@ import com.google.gson.annotations.SerializedName
 
 data class FollowersResponse(
 
-	@field:SerializedName("FollowersResponse")
-	val followersResponse: List<FollowersResponseItem>
-)
-
-data class FollowersResponseItem(
-
 	@field:SerializedName("gists_url")
 	val gistsUrl: String,
 
