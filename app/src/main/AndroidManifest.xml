@@ -13,15 +13,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Submission2GithubUser">
         <activity
+            android:name=".ui.insert.FavoriteUserAddUpdateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FavoriteUserActivity"
+            android:exported="false" />
+        <activity
             android:name=".DetailUserActivity"
-            android:exported="false"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
-            android:exported="true"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

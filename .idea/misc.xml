@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/ic_star_gold.xml" value="0.22604166666666667" />
         <entry key="app/src/main/res/layout/activity_detail_user.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_favorite_user.xml" value="0.20989583333333334" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.35507246376811596" />
         <entry key="app/src/main/res/layout/fragment_followers.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_following.xml" value="0.33" />

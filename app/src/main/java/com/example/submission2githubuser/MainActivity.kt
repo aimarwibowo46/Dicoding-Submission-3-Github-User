@@ -2,6 +2,7 @@ package com.example.submission2githubuser
 
 import android.app.SearchManager
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -62,6 +63,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.options -> {
+                startActivity(Intent(this, FavoriteUserActivity::class.java))
+                return true
+            }
+        }
         return true
     }
 
@@ -116,6 +123,7 @@ class MainActivity : AppCompatActivity() {
             )
             listUsers.add(user)
         }
+        Log.d(TAG, "setUsersData: $listUsers")
 
         val adapter = SearchUsersAdapter(listUsers)
         activityMainBinding.rvUser.adapter = adapter
