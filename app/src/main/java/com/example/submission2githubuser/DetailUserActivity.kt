@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModelProvider
@@ -20,9 +22,6 @@ class DetailUserActivity : AppCompatActivity() {
     companion object {
         const val TAG = "DetailUserActivity"
         const val USERNAME = "username"
-        const val EXTRA_FAVORITE_USER = "extra_favorite_user"
-        const val ALERT_DIALOG_CLOSE = 10
-        const val ALERT_DIALOG_DELETE = 20
 
         @StringRes
         private val TAB_TITLES = intArrayOf(R.string.tab_text_1, R.string.tab_text_2)
@@ -30,8 +29,6 @@ class DetailUserActivity : AppCompatActivity() {
 
     private lateinit var activityDetailUSerBinding: ActivityDetailUserBinding
     private lateinit var detailUserViewModel: DetailUserViewModel
-    private var isFavorite = false
-    private var favoriteUser: FavoriteUser? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +43,10 @@ class DetailUserActivity : AppCompatActivity() {
         sectionsPagerAdapter.username = username.toString()
 
         activityDetailUSerBinding.viewPager.adapter = sectionsPagerAdapter
-        TabLayoutMediator(activityDetailUSerBinding.tabs, activityDetailUSerBinding.viewPager) { tab, position ->
+        TabLayoutMediator(
+            activityDetailUSerBinding.tabs,
+            activityDetailUSerBinding.viewPager
+        ) { tab, position ->
             tab.text = resources.getString(TAB_TITLES[position])
         }.attach()
 
@@ -55,18 +55,49 @@ class DetailUserActivity : AppCompatActivity() {
 
         detailUserViewModel = obtainViewModel(this@DetailUserActivity)
 
-//        val countUser = detailUserViewModel.countFavoriteUser(username.toString())
-//        Log.d(TAG, "onCreate: $countUser")
-//        if(countUser == 1) {
-//            val checked: Int = R.drawable.ic_star_gold
-//            activityDetailUSerBinding.btnFavorite.setImageResource(checked)
-//        }
+        var checked = false
+        detailUserViewModel.countFavoriteUser(username.toString())
+            .observe(this) { checkedFavorite ->
+                if (!checked) {
+                    checked = true
+                    Log.d(TAG, "DEBUG: $checkedFavorite")
+                    if (checkedFavorite.isNotEmpty()) {
+                        activityDetailUSerBinding.btnFavorite.setImageResource(R.drawable.ic_star_gold)
+                    } else {
+                        activityDetailUSerBinding.btnFavorite.setImageResource(R.drawable.ic_star_gold_border)
+                    }
+                }
+            }
 
-        activityDetailUSerBinding.btnFavorite.setOnClickListener {
-            val checked: Int = R.drawable.ic_star_gold
-            activityDetailUSerBinding.btnFavorite.setImageResource(checked)
-//            startActivity(Intent(this, FavoriteUserActivity::class.java))
+
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.option_menu, menu)
+
+        val searchMenu = menu.findItem(R.id.search)
+        searchMenu.isVisible = false
+
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.favorite -> {
+                startActivity(Intent(this, FavoriteUserActivity::class.java))
+                return true
+            }
+            R.id.change_theme -> {
+                startActivity(Intent(this, ThemeActivity::class.java))
+                return true
+            }
+            R.id.notification -> {
+                startActivity(Intent(this, NotificationSettingsActivity::class.java))
+                return true
+            }
         }
+        return true
     }
 
     private fun obtainViewModel(activity: AppCompatActivity): DetailUserViewModel {
@@ -84,9 +115,10 @@ class DetailUserActivity : AppCompatActivity() {
                 response: Response<DetailUserResponse>
             ) {
                 showLoading(false)
-                if(response.isSuccessful) {
+                if (response.isSuccessful) {
                     val responseBody = response.body()
-                    if(responseBody != null) {
+                    if (responseBody != null) {
+                        setActivityTitle(responseBody)
                         setUsersData(responseBody)
                     }
                 } else {
@@ -100,6 +132,10 @@ class DetailUserActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    private fun setActivityTitle(items: DetailUserResponse) {
+        this.title = items.name
     }
 
     private fun setUsersData(items: DetailUserResponse) {
@@ -119,10 +155,33 @@ class DetailUserActivity : AppCompatActivity() {
         activityDetailUSerBinding.tvDetailCompany.text = textDetailCompany
         activityDetailUSerBinding.tvDetailLocation.text = textDetailLocation
         activityDetailUSerBinding.tvDetailRepository.text = textDetailRepos
+
+        activityDetailUSerBinding.btnFavorite.setOnClickListener {
+            var checked = false
+            detailUserViewModel.countFavoriteUser(items.login).observe(this) { checkedFavorite ->
+                if (!checked) {
+                    checked = true
+                    Log.d(TAG, "DEBUG2: $checkedFavorite")
+                    if (checkedFavorite.isNotEmpty()) {
+                        detailUserViewModel.delete(checkedFavorite[0])
+                        activityDetailUSerBinding.btnFavorite.setImageResource(R.drawable.ic_star_gold_border)
+                    } else {
+                        detailUserViewModel.insert(
+                            FavoriteUser(
+                                photo = items.avatarUrl,
+                                username = items.login
+                            )
+                        )
+                        activityDetailUSerBinding.btnFavorite.setImageResource(R.drawable.ic_star_gold)
+                    }
+                }
+            }
+
+        }
     }
 
     private fun showLoading(isLoading: Boolean) {
-        if(isLoading) {
+        if (isLoading) {
             activityDetailUSerBinding.progressBar.visibility = View.VISIBLE
         } else {
             activityDetailUSerBinding.progressBar.visibility = View.GONE

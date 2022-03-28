@@ -24,6 +24,16 @@
     <string name="tab_text_1">Followers</string>
     <string name="tab_text_2">Following</string>
     <string name="favorite">Favorite</string>
+    <string name="theme_settings">Theme Settings</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="notification_settings">Notification Settings</string>
+    <string name="reminder_setting">Reminder Setting</string>
+    <string name="daily_reminder">Daily Reminder</string>
+    <string name="title_notification_setting">Notification Settings</string>
+    <string name="daily_message">Find new favorite user on Github</string>
+    <string name="main_title">Github User App</string>
+    <string name="favorite_title">Favorite User</string>
+    <string name="theme_title">Theme Settings</string>
 
 
 </resources>

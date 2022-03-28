@@ -21,7 +21,7 @@ class FavoriteUserRepository(application: Application) {
         return mFavoriteUserDao.getAllFavoriteUser()
     }
 
-    fun countFavoriteUser(username: String): Int {
+    fun countFavoriteUser(username: String): LiveData<List<FavoriteUser>> {
         return mFavoriteUserDao.countFavoriteUser(username)
     }
 
@@ -31,9 +31,5 @@ class FavoriteUserRepository(application: Application) {
 
     fun delete(favoriteUser: FavoriteUser) {
         executorService.execute {mFavoriteUserDao.delete(favoriteUser)}
-    }
-
-    fun update(favoriteUser: FavoriteUser) {
-        executorService.execute {mFavoriteUserDao.update(favoriteUser)}
     }
 }

@@ -31,6 +31,8 @@ class MainActivity : AppCompatActivity() {
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
 
+        title = getString(R.string.main_title)
+
         val layoutManager = LinearLayoutManager(this)
         activityMainBinding.rvUser.layoutManager = layoutManager
 
@@ -64,8 +66,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
-            R.id.options -> {
+            R.id.favorite -> {
                 startActivity(Intent(this, FavoriteUserActivity::class.java))
+                return true
+            }
+            R.id.change_theme -> {
+                startActivity(Intent(this, ThemeActivity::class.java))
+                return true
+            }
+            R.id.notification -> {
+                startActivity(Intent(this, NotificationSettingsActivity::class.java))
                 return true
             }
         }

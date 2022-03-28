@@ -9,7 +9,13 @@
             app:actionViewClass="androidx.appcompat.widget.SearchView"
             app:showAsAction="collapseActionView|always" />
 
-        <item android:id="@+id/options"
+        <item android:id="@+id/favorite"
             android:title="@string/favorite" />
+
+        <item android:id="@+id/change_theme"
+            android:title="@string/theme_settings" />
+
+        <item android:id="@+id/notification"
+            android:title="@string/notification_settings"/>
     </group>
 </menu>
